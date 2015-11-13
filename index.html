@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf8"/>
+	<title>Змейка</title>
+	<script type="text/javascript">
+		var x = 0, dx = 15, y = 0, dy = 0, nx, ny;
+		var intervalId;
+		var i = 0, inter = 300;
+		var array = [];
+		var arrayX = [];
+		var arrayY = [];
+		
+		function creatDiv() {
+			var newDiv = document.createElement('div');
+			newDiv.style.left = parseInt(arrayX[0]) + 'px';
+			newDiv.style.top = parseInt(arrayY[0]) + 'px';
+			newDiv.style.position = 'absolute';
+			newDiv.style.width = '15px';
+			newDiv.style.height = '15px';
+			newDiv.style.background = 'green';
+			body.appendChild(newDiv);
+			i++;
+			return newDiv;
+		}
+		function interval() {
+			intervalId = setInterval('move()', inter);
+			point.style.left = Math.round(Math.random() * 25) * 15 + 'px';
+			point.style.top = Math.round(Math.random() * 25) * 15 + 'px';
+		}
+		document.onkeydown = function keyEvent() {
+			switch (event.keyCode) {
+				case 37: {dy = 0; dx = -15; break}
+				case 38: {dy = -15; dx = 0; break}
+				case 39: {dy = 0; dx = 15; break}
+				case 40: {dy = 15; dx = 0; break}
+			}
+		};
+		function move() {
+			arrayX.unshift(parseInt(rabbit.style.left) + 52 + 'px');
+			rabbit.style.left = x + 'px';
+			x += dx;
+			arrayY.unshift(parseInt(rabbit.style.top) + 52 + 'px');
+			rabbit.style.top = y + 'px';
+			y += dy;
+			var n = 0;
+			for ( ; n < array.length; n++ ) {
+				array[n].style.left = arrayX[n];
+				array[n].style.top = arrayY[n];
+			}
+			if (parseInt(rabbit.style.left) > 360 || parseInt(rabbit.style.left) < 0 || parseInt(rabbit.style.top) < 0 || parseInt(rabbit.style.top) > 360) {
+				x = 0; dx = 15; y = 0; dy = 0;
+				rabbit.style.left = '0px';
+				rabbit.style.top = '0px';
+				inter = 300;
+				clearInterval(intervalId);
+				intervalId = setInterval('move()', inter);
+				if (i > 0) {
+					for ( n = 0; n < array.length; n++ ) {
+						body.removeChild(array[n]);
+					}
+					array = [];
+					arrayX = [];
+					arrayY = [];
+					i = 0;
+				}
+				alert("ЕЩЕ??");
+				
+				//clearInterval(intervalId);
+			}
+			if (rabbit.style.left === point.style.left && rabbit.style.top === point.style.top ) {
+				point.style.left = Math.round(Math.random() * 25) * 15 + 'px';
+				point.style.top = Math.round(Math.random() * 25) * 15 + 'px';
+				array.unshift(creatDiv());
+				clearInterval(intervalId);
+				inter = inter == 40 ? 40 : inter -= 20;
+				intervalId = setInterval('move()', inter);
+			}
+		}
+	</script>
+	<style type="text/css">
+		#wall{
+			position: absolute;
+			top: 50px;
+			left: 50px;
+			width: 375px;
+			height: 375px;
+			border: 2px solid #666;
+			background-color: #FFF
+		}
+		#rabbit{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 15px;
+			height: 15px;
+			background-color: blue;
+		}
+		#point{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 15px;
+			height: 15px;
+			background-color: yellow;
+		}
+	</style>
+</head>
+<body id="body" onload="interval()">
+	<div id="wall">
+		<div id="rabbit"></div>
+		<div id="rabbitNew"></div>
+		<div id="point"></div>
+	</div>
+</body>
+</html>

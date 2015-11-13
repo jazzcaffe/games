@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf8"/>
+	<title>Морской Бой</title>
+	<script>
+		var array1 = [], array2 = [];
+		var i = 0, j = 0, n = 0, f = 0, s = 0;
+		var myShip = [], yourShip = [];
+		
+		function createArr() {
+				var array = [];
+				for ( i = 0; i < 10; i++) {
+					array[i] = [];
+					for ( j = 0; j < 10; j++) {
+						theDiv = document.createElement('div');
+						theDiv.style.top = 30 * i + 'px';
+						theDiv.style.left = 30 * j + 'px';
+						theDiv.style.border = '1px solid blue';
+						theDiv.style.position = 'absolute';
+						theDiv.style.width = '28px';
+						theDiv.style.height = '28px';
+						theDiv.style.background = 'white';
+						array[i][j] = theDiv;
+					}
+				}
+				return array;
+			}
+		function createDiv() {
+			array1 = createArr();
+			array2 = createArr();
+			for ( i = 0; i < 10; i++) {
+				for ( j = 0; j < 10; j++) {
+					fieldL.appendChild(array1[i][j]);
+					fieldR.appendChild(array2[i][j]);
+				}
+			}
+			var k;
+			for (k = 0; k < 10; k++) {
+				var x = Math.floor(Math.random()*10);
+				var y = Math.floor(Math.random()*10);
+				if (array2[x][y].style.background === "rgb(255, 255, 255)") {
+					k--;
+				} else {
+					array2[x][y].style.background = "rgb(255, 255, 255)";
+				}
+			}
+		}
+		alert('Заполни 10 одинарных кораблей');
+		function myField(event) {
+			if (n > 9) {
+				alert("Бей вражеские корабли!!");
+				
+			} else {
+				var event = event || window.event;
+				var x = Math.floor((parseInt(event.clientX) - 85) / 30);
+				var y = Math.floor((parseInt(event.clientY) - 85) / 30); 
+				if (array1[y][x].style.background === "green") {
+					alert("Выбери другой");
+				} else {
+					array1[y][x].style.background = "green";
+					n++;
+				}
+			}
+		}
+		function yourField(event) {
+			if (n != 10) {
+				alert('Заполни 10 одинарных кораблей');
+			} else {
+				var event  = event || window.event;
+				var x = Math.floor((parseInt(event.clientX) - 420) / 30);
+				var y = Math.floor((parseInt(event.clientY) - 85) / 30);
+				if (array2[y][x].style.background === "white") {
+					array2[y][x].style.background = "yellow";
+					myShipDie();
+				} else if (array2[y][x].style.background === "rgb(255, 255, 255)") {
+					array2[y][x].style.background = "red";
+					f++;
+					if (f === 10) {
+						alert("Победа!!");
+						location.reload();
+					}
+				} else if (array2[y][x].style.background === "yellow" || array2[y][x].style.background === "red") {
+					alert("Выбери пустую клетку");
+				}
+			}
+		}
+		function myShipDie() {
+			var x = Math.floor(Math.random()*10);
+			var y = Math.floor(Math.random()*10);
+			if (array1[x][y].style.background === "green") {
+				array1[x][y].style.background = "red";
+				s++;
+				myShipDie();
+				if (s === 10) {
+					alert("Ты проиграл");
+					location.reload();
+				}
+			} else if (array1[x][y].style.background === "white") {
+				array1[x][y].style.background = "yellow";
+			} else if (array1[x][y].style.background === "red" || array1[x][y].style.background === "yellow") {
+				myShipDie();
+			}
+		}
+		
+	</script>
+	<style type="text/css">
+		#fieldAll{
+			position: absolute;
+			top: 50px;
+			left: 50px;
+			width: 670px;
+			height: 334px;
+			border: 2px solid black;
+		}
+		#fieldL{
+			position: absolute;
+			top: 30px;
+			left: 30px;
+			width: 300px;
+			height: 300px;
+			border: 2px solid blue;
+		}
+		#fieldR{
+			position: absolute;
+			top: 30px;
+			left: 366px;
+			width: 300px;
+			height: 300px;
+			border: 2px solid blue;
+		}
+	</style>
+</head>
+<body id="body" onload="createDiv();" >
+	<div id="fieldAll">
+		<div id="fieldL" onclick="myField(event);"></div>
+		<div id="fieldR" onclick="yourField(event)"></div>
+	</div>
+</body>
+</html>
